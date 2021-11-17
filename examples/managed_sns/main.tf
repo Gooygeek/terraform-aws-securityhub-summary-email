@@ -1,5 +1,5 @@
 module "securityhub-email" {
-  source  = "gooygeek/security-hub-summary-email/aws"
+  source  = "gooygeek/securityhub-summary-email/aws"
   version = "1.0.0"
 
   name = "securityhub-summariser"
