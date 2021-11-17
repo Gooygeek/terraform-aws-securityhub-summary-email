@@ -1,4 +1,4 @@
-output "sns_topic" {
+output "sns_topic_arn" {
   description = "The SNS topic that was created"
-  value       = local.create_sns_topic ? module.sns_topic[0].sns_topic : null
+  value       = sns_topic_arn != null ? aws_sns_topic.this[0].arn : var.sns_topic_arn
 }

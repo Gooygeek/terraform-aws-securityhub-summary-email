@@ -160,7 +160,7 @@ resource "aws_securityhub_insight" "new_findings" {
       value      = "SUPPRESSED"
     }
     created_at {
-      date_rage {
+      date_range {
         unit  = "DAYS"
         value = "7"
       }
@@ -224,7 +224,7 @@ EOF
         {
           Action   = ["sns:Publish"]
           Effect   = "Allow"
-          Resource = var.sns_topic_arn != null ? var.sns_topic_arn : var.sns_aws_sns_topic.this[0].arn
+          Resource = var.sns_topic_arn != null ? var.sns_topic_arn : var.aws_sns_topic.this[0].arn
         },
       ]
     })
@@ -256,7 +256,7 @@ resource "aws_lambda_function" "sechub_summariser" {
       ARNInsight05              = aws_securityhub_insight.all_by_severity.arn
       ARNInsight06              = aws_securityhub_insight.new_findings.arn
       ARNInsight07              = aws_securityhub_insight.top_resource_types.arn
-      SNSTopic                  = var.sns_topic_arn != null ? var.sns_topic_arn : var.sns_aws_sns_topic.this[0].arn
+      SNSTopic                  = var.sns_topic_arn != null ? var.sns_topic_arn : var.aws_sns_topic.this[0].arn
       AdditionalEmailFooterText = var.additional_email_footer_text
     }
   }
