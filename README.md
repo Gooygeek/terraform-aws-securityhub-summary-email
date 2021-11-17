@@ -60,24 +60,23 @@ Here is an example of using this module: [`examples/complete`](https://github.co
 
 ## Resources
 
-| Name                                                                                                                                                     | Type     |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| [aws_cloudwatch_event_rule.trigger](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_rule)                   | resource |
-| [aws_cloudwatch_event_target.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)                | resource |
-| [aws_iam_role.iam_for_lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)                       | resource |
-| [aws_lambda_permission.trigger](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)                     | resource |
-| [aws_lambda_function.sechub_summariser](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)             | resource |
-| [aws_securityhub_insight.all_by_severity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)           | resource |
-| [aws_securityhub_insight.aws_best_prac_by_severity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target) | resource |
-| [aws_securityhub_insight.aws_best_prac_by_status](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)   | resource |
-| [aws_securityhub_insight.guardduty_by_severity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)     | resource |
-| [aws_securityhub_insight.iam_by_severity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)           | resource |
-| [aws_securityhub_insight.new_findings](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)              | resource |
-| [aws_securityhub_insight.top_resource_types](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)        | resource |
-| [aws_sns_topic.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)                                | resource |
-| [aws_sns_topic_subscription.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)                   | resource |
-
-| [aws_partition.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
+| Name                                                                                                                                                     | Type        |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| [aws_cloudwatch_event_rule.trigger](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_rule)                   | resource    |
+| [aws_cloudwatch_event_target.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)                | resource    |
+| [aws_iam_role.iam_for_lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)                       | resource    |
+| [aws_lambda_permission.trigger](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)                     | resource    |
+| [aws_lambda_function.sechub_summariser](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)             | resource    |
+| [aws_securityhub_insight.all_by_severity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)           | resource    |
+| [aws_securityhub_insight.aws_best_prac_by_severity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target) | resource    |
+| [aws_securityhub_insight.aws_best_prac_by_status](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)   | resource    |
+| [aws_securityhub_insight.guardduty_by_severity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)     | resource    |
+| [aws_securityhub_insight.iam_by_severity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)           | resource    |
+| [aws_securityhub_insight.new_findings](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)              | resource    |
+| [aws_securityhub_insight.top_resource_types](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)        | resource    |
+| [aws_sns_topic.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)                                | resource    |
+| [aws_sns_topic_subscription.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)                   | resource    |
+| [aws_partition.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition)                                           | data source |
 
 ## Inputs
 
@@ -87,7 +86,7 @@ Here is an example of using this module: [`examples/complete`](https://github.co
 | <a name="input_email"></a> [email](#input_email)                                                                      | Email Address for Subscriber to Security Hub summary. Only used if SNS arn is not specified.                                                       | `string`      | `null`              |    no    |
 | <a name="input_name"></a> [name](#input_name)                                                                         | ID element. Usually the component or solution name, e.g. 'app' or 'jenkins'.                                                                       | `string`      | `sechub-aummariser` |    no    |
 | <a name="input_schedule"></a> [schedule](#input_schedule)                                                             | Expression for scheduling the Security Hub summary email. Default: Every Monday 8:00 AM UTC. Example: Every Friday 9:00 AM UTC: cron(0 9 ? _ 6 _). | `string`      | `cron(0 8 ? * 2 *)` |    no    |
-| <a name="input_sns_topic_arn"></a> [sns_topic_arn](#input_sns_topic_arn)                                              | ARN of the SNS Topic to send summaries to. If empty, a topic is created for you.                                                                   | `string`      | N/A                 |   yes    |
+| <a name="input_sns_topic_arn"></a> [sns_topic_arn](#input_sns_topic_arn)                                              | ARN of the SNS Topic to send summaries to. If empty, a topic is created for you.                                                                   | `string`      | `null`              |    no    |
 | <a name="input_tags"></a> [tags](#input_tags)                                                                         | Additional tags (e.g. `{'BusinessUnit': 'XYZ'}`).                                                                                                  | `map(string)` | `{}`                |    no    |
 
 ## Outputs
