@@ -233,7 +233,7 @@ EOF
   managed_policy_arns = ["arn:${data.aws_partition.this.partition}:iam::aws:policy/AWSSecurityHubReadOnlyAccess"]
 }
 
-data "archive_file" "init" {
+data "archive_file" "code" {
   type        = "zip"
   source_file = "${path.module}/sec-hub-email.py"
   output_path = "${path.module}/sec-hub-email.zip"
@@ -248,7 +248,7 @@ resource "aws_lambda_function" "sechub_summariser" {
   # The filebase64sha256() function is available in Terraform 0.11.12 and later
   # For Terraform 0.11.11 and earlier, use the base64sha256() function and the file() function:
   # source_code_hash = "${base64sha256(file("lambda_function_payload.zip"))}"
-  source_code_hash = filebase64sha256("${path.module}/sec-hub-email.zip")
+  source_code_hash = archive_file.code.output_base64sha256
 
   runtime = "python3.7"
   timeout = 30
