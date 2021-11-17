@@ -240,15 +240,11 @@ data "archive_file" "code" {
 }
 
 resource "aws_lambda_function" "sechub_summariser" {
-  filename      = "${path.module}/sec-hub-email.zip"
-  function_name = var.name
-  role          = aws_iam_role.iam_for_lambda.arn
-  handler       = "sec-hub-email.lambda_handler"
-
-  # The filebase64sha256() function is available in Terraform 0.11.12 and later
-  # For Terraform 0.11.11 and earlier, use the base64sha256() function and the file() function:
-  # source_code_hash = "${base64sha256(file("lambda_function_payload.zip"))}"
-  source_code_hash = archive_file.code.output_base64sha256
+  filename         = data.archive_file.code.output_path
+  function_name    = var.name
+  role             = aws_iam_role.iam_for_lambda.arn
+  handler          = "sec-hub-email.lambda_handler"
+  source_code_hash = data.archive_file.code.output_base64sha256
 
   runtime = "python3.7"
   timeout = 30
