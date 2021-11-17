@@ -44,7 +44,7 @@ resource "aws_securityhub_insight" "aws_best_prac_by_status" {
   filters {
     type {
       comparison = "EQUALS"
-      value      = "Software and Configuration Checks/Industry and Regulatory Standards/ AWS - Foundational - Security - Best - Practices"
+      value      = "Software and Configuration Checks/Industry and Regulatory Standards/AWS-Foundational-Security-Best-Practices"
     }
     workflow_status {
       comparison = "NOT_EQUALS"
@@ -65,7 +65,7 @@ resource "aws_securityhub_insight" "aws_best_prac_by_severity" {
   filters {
     type {
       comparison = "EQUALS"
-      value      = "Software and Configuration Checks/Industry and Regulatory Standards/ AWS - Foundational - Security - Best - Practices"
+      value      = "Software and Configuration Checks/Industry and Regulatory Standards/AWS-Foundational-Security-Best-Practices"
     }
     workflow_status {
       comparison = "NOT_EQUALS"
