@@ -7,7 +7,7 @@
 #  |_____/|_| \_|_____/
 
 resource "aws_sns_topic" "this" {
-  count = var.sns_topic_arn != null ? 1 : 0
+  count = var.sns_topic_arn == null ? 1 : 0
 
   name         = var.name
   display_name = replace(var.name, ".", "-") # dots are illegal in display names and for .fifo topics required as part of the name (AWS SNS by design)
@@ -20,7 +20,7 @@ resource "aws_sns_topic" "this" {
 }
 
 resource "aws_sns_topic_subscription" "this" {
-  count = (var.sns_topic_arn != null) && (var.email != null) ? 1 : 0
+  count = (var.sns_topic_arn == null) && (var.email != null) ? 1 : 0
 
   topic_arn = aws_sns_topic.this[0].arn
   protocol  = "email"
