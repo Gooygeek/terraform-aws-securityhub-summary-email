@@ -7,10 +7,10 @@
 #  |_____/|_| \_|_____/
 
 resource "aws_sns_topic" "this" {
-  count = sns_topic_arn != null ? 1 : 0
+  count = var.sns_topic_arn != null ? 1 : 0
 
   name         = var.name
-  display_name = replace(name, ".", "-") # dots are illegal in display names and for .fifo topics required as part of the name (AWS SNS by design)
+  display_name = replace(var.name, ".", "-") # dots are illegal in display names and for .fifo topics required as part of the name (AWS SNS by design)
   # kms_master_key_id           = var.kms_key_id
   # delivery_policy             = var.delivery_policy
   # fifo_topic                  = var.fifo_topic
@@ -20,9 +20,9 @@ resource "aws_sns_topic" "this" {
 }
 
 resource "aws_sns_topic_subscription" "this" {
-  count = (sns_topic_arn != null) && (var.email != null) ? 1 : 0
+  count = (var.sns_topic_arn != null) && (var.email != null) ? 1 : 0
 
-  topic_arn = aws_sns_topic.arn
+  topic_arn = aws_sns_topic.this[0].arn
   protocol  = "email"
   endpoint  = var.email
 }
@@ -224,7 +224,7 @@ EOF
         {
           Action   = ["sns:Publish"]
           Effect   = "Allow"
-          Resource = var.sns_topic_arn != null ? var.sns_topic_arn : var.aws_sns_topic.this[0].arn
+          Resource = var.sns_topic_arn != null ? var.sns_topic_arn : aws_sns_topic.this[0].arn
         },
       ]
     })
@@ -234,7 +234,7 @@ EOF
 }
 
 resource "aws_lambda_function" "sechub_summariser" {
-  filename      = "lambda_function_payload.zip"
+  filename      = "sec-hub-email.zip"
   function_name = var.name
   role          = aws_iam_role.iam_for_lambda.arn
   handler       = "index.lambda_handler"
@@ -242,7 +242,7 @@ resource "aws_lambda_function" "sechub_summariser" {
   # The filebase64sha256() function is available in Terraform 0.11.12 and later
   # For Terraform 0.11.11 and earlier, use the base64sha256() function and the file() function:
   # source_code_hash = "${base64sha256(file("lambda_function_payload.zip"))}"
-  source_code_hash = filebase64sha256("lambda_function_payload.zip")
+  source_code_hash = filebase64sha256("sec-hub-email.zip")
 
   runtime = "python3.7"
   timeout = 30
@@ -256,7 +256,7 @@ resource "aws_lambda_function" "sechub_summariser" {
       ARNInsight05              = aws_securityhub_insight.all_by_severity.arn
       ARNInsight06              = aws_securityhub_insight.new_findings.arn
       ARNInsight07              = aws_securityhub_insight.top_resource_types.arn
-      SNSTopic                  = var.sns_topic_arn != null ? var.sns_topic_arn : var.aws_sns_topic.this[0].arn
+      SNSTopic                  = var.sns_topic_arn != null ? var.sns_topic_arn : aws_sns_topic.this[0].arn
       AdditionalEmailFooterText = var.additional_email_footer_text
     }
   }
@@ -265,7 +265,7 @@ resource "aws_lambda_function" "sechub_summariser" {
 resource "aws_lambda_permission" "trigger" {
   statement_id  = "AllowExecutionFromEvents"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.sechub_summariser.name
+  function_name = aws_lambda_function.sechub_summariser.function_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.trigger.arn
 }
