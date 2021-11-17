@@ -43,7 +43,7 @@ module "securityhub-email" {
 
 ## Examples
 
-Here is an example of using this module: [`examples/complete`](https://github.com/gooygeek/terraform-aws-securityhub-summary-email/tree/master/examples/complete/)
+Here is an example of using this module: [`examples/managed_sns`](https://github.com/gooygeek/terraform-aws-securityhub-summary-email/tree/master/examples/managed_sns/)
 
 ## Requirements
 
