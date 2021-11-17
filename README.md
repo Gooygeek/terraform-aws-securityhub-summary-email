@@ -60,16 +60,24 @@ Here is an example of using this module: [`examples/complete`](https://github.co
 
 ## Resources
 
-| Name                                                                                                                                                          | Type        |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| [aws_cloudwatch_event_rule.imported_findings](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_rule)              | resource    |
-| [aws_cloudwatch_event_target.imported_findings](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)          | resource    |
-| [aws_securityhub_account.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_account)                               | resource    |
-| [aws_securityhub_standards_subscription.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_standards_subscription) | resource    |
-| [aws_caller_identity.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity)                                    | data source |
-| [aws_iam_policy_document.sns_kms_key_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document)              | data source |
-| [aws_partition.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition)                                                | data source |
-| [aws_region.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region)                                                      | data source |
+| Name                                                                                                                                                     | Type     |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| [aws_cloudwatch_event_rule.trigger](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_rule)                   | resource |
+| [aws_cloudwatch_event_target.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)                | resource |
+| [aws_iam_role.iam_for_lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)                       | resource |
+| [aws_lambda_permission.trigger](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)                     | resource |
+| [aws_lambda_function.sechub_summariser](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)             | resource |
+| [aws_securityhub_insight.all_by_severity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)           | resource |
+| [aws_securityhub_insight.aws_best_prac_by_severity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target) | resource |
+| [aws_securityhub_insight.aws_best_prac_by_status](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)   | resource |
+| [aws_securityhub_insight.guardduty_by_severity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)     | resource |
+| [aws_securityhub_insight.iam_by_severity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)           | resource |
+| [aws_securityhub_insight.new_findings](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)              | resource |
+| [aws_securityhub_insight.top_resource_types](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)        | resource |
+| [aws_sns_topic.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)                                | resource |
+| [aws_sns_topic_subscription.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)                   | resource |
+
+| [aws_partition.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
 
 ## Inputs
 
@@ -84,11 +92,9 @@ Here is an example of using this module: [`examples/complete`](https://github.co
 
 ## Outputs
 
-| Name                                                                                                     | Description                                    |
-| -------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| <a name="output_enabled_subscriptions"></a> [enabled_subscriptions](#output_enabled_subscriptions)       | A list of subscriptions that have been enabled |
-| <a name="output_sns_topic"></a> [sns_topic](#output_sns_topic)                                           | The SNS topic that was created                 |
-| <a name="output_sns_topic_subscriptions"></a> [sns_topic_subscriptions](#output_sns_topic_subscriptions) | The SNS topic that was created                 |
+| Name                                                           | Description                    |
+| -------------------------------------------------------------- | ------------------------------ |
+| <a name="output_sns_topic"></a> [sns_topic](#output_sns_topic) | The SNS topic that was created |
 
 ## Test Solution
 
