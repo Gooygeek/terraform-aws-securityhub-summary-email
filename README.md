@@ -1,4 +1,8 @@
 # terraform-aws-securityhub-summary-email
+<!-- markdownlint-disable -->
+[![Build Status](https://github.com/gooygeek/terraform-aws-securityhub-summary-email/actions/workflows/terraform.yml/badge.svg)](https://github.com/gooygeek/terraform-aws-securityhub-summary-email/actions/workflows/terraform.yml)
+[![Release](https://github.com/gooygeek/terraform-aws-securityhub-summary-email/actions/workflows/release.yml/badge.svg)](https://github.com/gooygeek/terraform-aws-securityhub-summary-email/actions/workflows/release.yml)
+<!-- markdownlint-restore -->
 
 Generates and sends a periodic email summarising of Security Hub. Based on https://github.com/aws-samples/aws-security-hub-summary-email
 
