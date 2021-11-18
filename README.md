@@ -1,7 +1,10 @@
 # terraform-aws-securityhub-summary-email
+
 <!-- markdownlint-disable -->
+
 [![Build Status](https://github.com/gooygeek/terraform-aws-securityhub-summary-email/actions/workflows/terraform.yml/badge.svg)](https://github.com/gooygeek/terraform-aws-securityhub-summary-email/actions/workflows/terraform.yml)
 [![Release](https://github.com/gooygeek/terraform-aws-securityhub-summary-email/actions/workflows/release.yml/badge.svg)](https://github.com/gooygeek/terraform-aws-securityhub-summary-email/actions/workflows/release.yml)
+
 <!-- markdownlint-restore -->
 
 Generates and sends a periodic email summarising of Security Hub. Based on https://github.com/aws-samples/aws-security-hub-summary-email
@@ -64,23 +67,24 @@ Here is an example of using this module: [`examples/managed_sns`](https://github
 
 ## Resources
 
-| Name                                                                                                                                                     | Type        |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| [aws_cloudwatch_event_rule.trigger](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_rule)                   | resource    |
-| [aws_cloudwatch_event_target.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)                | resource    |
-| [aws_iam_role.iam_for_lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)                       | resource    |
-| [aws_lambda_permission.trigger](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)                     | resource    |
-| [aws_lambda_function.sechub_summariser](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)             | resource    |
-| [aws_securityhub_insight.all_by_severity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)           | resource    |
-| [aws_securityhub_insight.aws_best_prac_by_severity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target) | resource    |
-| [aws_securityhub_insight.aws_best_prac_by_status](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)   | resource    |
-| [aws_securityhub_insight.guardduty_by_severity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)     | resource    |
-| [aws_securityhub_insight.iam_by_severity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)           | resource    |
-| [aws_securityhub_insight.new_findings](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)              | resource    |
-| [aws_securityhub_insight.top_resource_types](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)        | resource    |
-| [aws_sns_topic.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)                                | resource    |
-| [aws_sns_topic_subscription.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)                   | resource    |
-| [aws_partition.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition)                                           | data source |
+| Name                                                                                                                                                 | Type        |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| [aws_cloudwatch_event_rule.trigger](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_rule)               | resource    |
+| [aws_cloudwatch_event_target.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)            | resource    |
+| [aws_iam_role.iam_for_lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role)                                  | resource    |
+| [aws_lambda_permission.trigger](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission)                       | resource    |
+| [aws_lambda_function.sechub_summariser](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function)                 | resource    |
+| [aws_securityhub_insight.all_by_severity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_insight)           | resource    |
+| [aws_securityhub_insight.aws_best_prac_by_severity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_insight) | resource    |
+| [aws_securityhub_insight.aws_best_prac_by_status](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_insight)   | resource    |
+| [aws_securityhub_insight.guardduty_by_severity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_insight)     | resource    |
+| [aws_securityhub_insight.iam_by_severity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_insight)           | resource    |
+| [aws_securityhub_insight.new_findings](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_insight)              | resource    |
+| [aws_securityhub_insight.top_resource_types](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_insight)        | resource    |
+| [aws_sns_topic.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic)                                          | resource    |
+| [aws_sns_topic_subscription.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic_subscription)                | resource    |
+| [archive_file.code](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/archive_file)                                 | data source |
+| [aws_partition.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition)                                       | data source |
 
 ## Inputs
 
@@ -95,9 +99,9 @@ Here is an example of using this module: [`examples/managed_sns`](https://github
 
 ## Outputs
 
-| Name                                                           | Description                    |
-| -------------------------------------------------------------- | ------------------------------ |
-| <a name="output_sns_topic"></a> [sns_topic](#output_sns_topic) | The SNS topic that was created |
+| Name                                                                       | Description                          |
+| -------------------------------------------------------------------------- | ------------------------------------ |
+| <a name="output_sns_topic_arn"></a> [sns_topic_arn](#output_sns_topic_arn) | The SNS topic's ARN that was created |
 
 ## Test Solution
 
