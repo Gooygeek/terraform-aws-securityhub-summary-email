@@ -97,6 +97,7 @@ Here is an example of using this module: [`examples/managed_sns`](https://github
 | <a name="input_sns_topic_arn"></a> [sns_topic_arn](#input_sns_topic_arn)                                              | ARN of the SNS Topic to send summaries to. If empty, a topic is created for you.                                                                   | `string`      | `null`              |    no    |
 | <a name="input_kms_key_id"></a> [kms_key_id](#input_kms_key_id)                                                       | KMS Key ID to use for encrypting the topic.                                                                                                        | `string`      | `alias/aws/sns`     |    no    |
 | <a name="input_tags"></a> [tags](#input_tags)                                                                         | Additional tags (e.g. `{'BusinessUnit': 'XYZ'}`).                                                                                                  | `map(string)` | `{}`                |    no    |
+| <a name="input_additional_email_header_text"></a> [additional_email_header_text](#input_additional_email_header_text) | Additional text to append at the start of email message.                                                                                                                                                                                                                                                                                           | `string`      | `""`                |    no    |
 
 ## Outputs
 

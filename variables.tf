@@ -1,3 +1,9 @@
+variable "additional_email_header_text" {
+  description = "Additional text to prepend at the start of email message"
+  type        = string
+  default     = ""
+}
+
 variable "additional_email_footer_text" {
   description = "Additional text to append at the end of email message"
   type        = string

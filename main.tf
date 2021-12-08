@@ -259,6 +259,7 @@ resource "aws_lambda_function" "sechub_summariser" {
       ARNInsight06              = aws_securityhub_insight.new_findings.arn
       ARNInsight07              = aws_securityhub_insight.top_resource_types.arn
       SNSTopic                  = var.sns_topic_arn != null ? var.sns_topic_arn : aws_sns_topic.this[0].arn
+      AdditionalEmailHeaderText = var.additional_email_header_text
       AdditionalEmailFooterText = var.additional_email_footer_text
     }
   }

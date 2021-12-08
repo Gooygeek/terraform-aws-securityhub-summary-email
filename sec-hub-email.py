@@ -8,8 +8,10 @@ logger.setLevel(logging.INFO)
 SINGLE_LINE_LENGTH = 80
 DOUBLE_LINE_LENGTH = 47
 FOOTER_TEXT = os.environ['AdditionalEmailFooterText']
-HEADER_TEXT = 'Weekly Security Hub Report \n'
+HEADER_TEXT = os.environ['AdditionalEmailHeaderText']
+TITLE_TEXT = 'Weekly Security Hub Report \n'
 FOOTER_URL = 'https://console.aws.amazon.com/securityhub/home/standards#/standards'
+
 
 # this function will add a horizontal line to the email
 def add_horizontal_line(text_body, line_char, line_length):
@@ -56,9 +58,12 @@ def lambda_handler(event, context):
     #format Email header
     snsBody = ''
     snsBody = add_horizontal_line(snsBody, '=', DOUBLE_LINE_LENGTH)
-    snsBody += HEADER_TEXT
+    snsBody += TITLE_TEXT
     snsBody = add_horizontal_line(snsBody, '=', DOUBLE_LINE_LENGTH)
     snsBody += '\n\n'
+    if len(HEADER_TEXT) != 0:
+        snsBody += HEADER_TEXT
+        snsBody += '\n\n'
 
     #create boto3 client for Security Hub API calls
     sec_hub_client = boto3.client('securityhub')
