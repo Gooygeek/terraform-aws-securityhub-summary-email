@@ -9,9 +9,9 @@
 resource "aws_sns_topic" "this" {
   count = var.sns_topic_arn == null ? 1 : 0
 
-  name         = var.name
-  display_name = replace(var.name, ".", "-") # dots are illegal in display names and for .fifo topics required as part of the name (AWS SNS by design)
-  # kms_master_key_id           = var.kms_key_id
+  name              = var.name
+  display_name      = replace(var.name, ".", "-") # dots are illegal in display names and for .fifo topics required as part of the name (AWS SNS by design)
+  kms_master_key_id = var.kms_key_id
   # delivery_policy             = var.delivery_policy
   # fifo_topic                  = var.fifo_topic
   # content_based_deduplication = var.content_based_deduplication

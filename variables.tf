@@ -28,6 +28,12 @@ variable "sns_topic_arn" {
   default     = null
 }
 
+variable "kms_key_id" {
+  description = "KMS Key ID to use for encrypting the topic"
+  type        = string
+  default     = "alias/aws/sns"
+}
+
 variable "tags" {
   description = "Additional tags"
   type        = map(string)
