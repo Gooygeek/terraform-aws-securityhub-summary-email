@@ -96,6 +96,10 @@ resource "aws_securityhub_insight" "guardduty_by_severity" {
       comparison = "NOT_EQUALS"
       value      = "SUPPRESSED"
     }
+    workflow_status {
+      comparison = "NOT_EQUALS"
+      value      = "RESOLVED"
+    }
     record_state {
       comparison = "EQUALS"
       value      = "ACTIVE"
