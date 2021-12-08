@@ -37,7 +37,7 @@ resource "aws_sns_topic_subscription" "this" {
 #                     |___/
 
 resource "aws_securityhub_insight" "aws_best_prac_by_status" {
-  name = "Summary Email - 01 - AWS Foundational Security Best practices findings by compliance status"
+  name = "Summary Email - AWS Foundational Security Best practices findings by compliance status"
 
   group_by_attribute = "ComplianceStatus"
 
@@ -58,7 +58,7 @@ resource "aws_securityhub_insight" "aws_best_prac_by_status" {
 }
 
 resource "aws_securityhub_insight" "aws_best_prac_by_severity" {
-  name = "Summary Email - 02 - Failed AWS Foundational Security Best practices findings by severity"
+  name = "Summary Email - Failed AWS Foundational Security Best practices findings by severity"
 
   group_by_attribute = "SeverityLabel"
 
@@ -82,8 +82,54 @@ resource "aws_securityhub_insight" "aws_best_prac_by_severity" {
   }
 }
 
+resource "aws_securityhub_insight" "cis_by_status" {
+  name = "Summary Email - CIS Benchmark findings by compliance status"
+
+  group_by_attribute = "ComplianceStatus"
+
+  filters {
+    type {
+      comparison = "EQUALS"
+      value      = "Software and Configuration Checks/Industry and Regulatory Standards/CIS AWS Foundations Benchmark"
+    }
+    workflow_status {
+      comparison = "NOT_EQUALS"
+      value      = "SUPPRESSED"
+    }
+    record_state {
+      comparison = "EQUALS"
+      value      = "ACTIVE"
+    }
+  }
+}
+
+resource "aws_securityhub_insight" "cis_by_severity" {
+  name = "Summary Email - Failed CIS Benchmark findings by severity"
+
+  group_by_attribute = "SeverityLabel"
+
+  filters {
+    type {
+      comparison = "EQUALS"
+      value      = "Software and Configuration Checks/Industry and Regulatory Standards/CIS AWS Foundations Benchmark"
+    }
+    workflow_status {
+      comparison = "NOT_EQUALS"
+      value      = "SUPPRESSED"
+    }
+    compliance_status {
+      comparison = "EQUALS"
+      value      = "FAILED"
+    }
+    record_state {
+      comparison = "EQUALS"
+      value      = "ACTIVE"
+    }
+  }
+}
+
 resource "aws_securityhub_insight" "guardduty_by_severity" {
-  name = "Summary Email - 03 - Count of Amazon GuardDuty findings by severity"
+  name = "Summary Email - Count of Amazon GuardDuty findings by severity"
 
   group_by_attribute = "SeverityLabel"
 
@@ -108,7 +154,7 @@ resource "aws_securityhub_insight" "guardduty_by_severity" {
 }
 
 resource "aws_securityhub_insight" "iam_by_severity" {
-  name = "Summary Email - 04 - Count of IAM Access Analyzer findings by severity"
+  name = "Summary Email - Count of IAM Access Analyzer findings by severity"
 
   group_by_attribute = "SeverityLabel"
 
@@ -129,7 +175,7 @@ resource "aws_securityhub_insight" "iam_by_severity" {
 }
 
 resource "aws_securityhub_insight" "all_by_severity" {
-  name = "Summary Email - 05 - Count of all unresolved findings by severity"
+  name = "Summary Email - Count of all unresolved findings by severity"
 
   group_by_attribute = "SeverityLabel"
 
@@ -150,7 +196,7 @@ resource "aws_securityhub_insight" "all_by_severity" {
 }
 
 resource "aws_securityhub_insight" "new_findings" {
-  name = "Summary Email - 06 - new findings in the last 7 days"
+  name = "Summary Email - new findings in the last 7 days"
 
   group_by_attribute = "ProductName"
 
@@ -177,7 +223,7 @@ resource "aws_securityhub_insight" "new_findings" {
 }
 
 resource "aws_securityhub_insight" "top_resource_types" {
-  name = "Summary Email - 07 - Top Resource Types with findings by count"
+  name = "Summary Email - Top Resource Types with findings by count"
 
   group_by_attribute = "ResourceType"
 
@@ -191,6 +237,24 @@ resource "aws_securityhub_insight" "top_resource_types" {
       value      = "ACTIVE"
     }
   }
+}
+
+locals {
+  insight_map = {
+    "aws_best_practices_by_status"              = aws_securityhub_insight.aws_best_prac_by_status.arn
+    "aws_best_practices_by_severity"            = aws_securityhub_insight.aws_best_prac_by_severity.arn
+    "cis_by_status"                             = aws_securityhub_insight.cis_by_status.arn
+    "cis_by_severity"                           = aws_securityhub_insight.cis_by_severity.arn
+    "guardduty_findings_by_severity"            = aws_securityhub_insight.guardduty_by_severity.arn
+    "iam_access_keys_by_severity"               = aws_securityhub_insight.iam_by_severity.arn
+    "all_findings_by_severity"                  = aws_securityhub_insight.all_by_severity.arn
+    "new_findings"                              = aws_securityhub_insight.new_findings.arn
+    "top_resource_types_with_findings_by_count" = aws_securityhub_insight.top_resource_types.arn
+  }
+
+  insight_list = [
+    for i in var.insights : [i, local.insight_map[i]]
+  ]
 }
 
 #   _                     _         _
@@ -234,7 +298,10 @@ EOF
     })
   }
 
-  managed_policy_arns = ["arn:${data.aws_partition.this.partition}:iam::aws:policy/AWSSecurityHubReadOnlyAccess"]
+  managed_policy_arns = [
+    "arn:${data.aws_partition.this.partition}:iam::aws:policy/AWSSecurityHubReadOnlyAccess",
+    "arn:${data.aws_partition.this.partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  ]
 }
 
 data "archive_file" "code" {
@@ -255,13 +322,7 @@ resource "aws_lambda_function" "sechub_summariser" {
 
   environment {
     variables = {
-      ARNInsight01              = aws_securityhub_insight.aws_best_prac_by_status.arn
-      ARNInsight02              = aws_securityhub_insight.aws_best_prac_by_severity.arn
-      ARNInsight03              = aws_securityhub_insight.guardduty_by_severity.arn
-      ARNInsight04              = aws_securityhub_insight.iam_by_severity.arn
-      ARNInsight05              = aws_securityhub_insight.all_by_severity.arn
-      ARNInsight06              = aws_securityhub_insight.new_findings.arn
-      ARNInsight07              = aws_securityhub_insight.top_resource_types.arn
+      Insights                  = jsonencode(local.insight_list)
       SNSTopic                  = var.sns_topic_arn != null ? var.sns_topic_arn : aws_sns_topic.this[0].arn
       AdditionalEmailHeaderText = var.additional_email_header_text
       AdditionalEmailFooterText = var.additional_email_footer_text

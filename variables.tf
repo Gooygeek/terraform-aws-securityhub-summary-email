@@ -16,6 +16,12 @@ variable "email" {
   default     = null
 }
 
+variable "insights" {
+  description = "list of insights and in what order to include in the summary. Possible values are: `aws_best_practices_by_status`, `aws_best_practices_by_severity`, `cis_by_status`, `cis_by_severity`, `guardduty_findings_by_severity`, `iam_access_keys_by_severity`, `all_findings_by_severity`, `new_findings`, `top_resource_types_with_findings_by_count`"
+  type        = list(any)
+  default     = []
+}
+
 variable "name" {
   description = "ID element"
   type        = string
