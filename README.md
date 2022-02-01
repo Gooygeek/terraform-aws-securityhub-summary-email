@@ -2,10 +2,12 @@
 
 <!-- markdownlint-disable -->
 
-[![Build Status](https://github.com/gooygeek/terraform-aws-securityhub-summary-email/actions/workflows/terraform.yml/badge.svg)](https://github.com/gooygeek/terraform-aws-securityhub-summary-email/actions/workflows/terraform.yml)
-[![Release](https://github.com/gooygeek/terraform-aws-securityhub-summary-email/actions/workflows/release.yml/badge.svg)](https://github.com/gooygeek/terraform-aws-securityhub-summary-email/actions/workflows/release.yml)
+[![Build Status](https://github.com/aesop/terraform-aws-securityhub-summary-email/actions/workflows/terraform.yml/badge.svg)](https://github.com/aesop/terraform-aws-securityhub-summary-email/actions/workflows/terraform.yml)
+[![Release](https://github.com/aesop/terraform-aws-securityhub-summary-email/actions/workflows/release.yml/badge.svg)](https://github.com/aesop/terraform-aws-securityhub-summary-email/actions/workflows/release.yml)
 
 <!-- markdownlint-restore -->
+
+Cloned from [gooygeek/terraform-aws-securityhub-summary-email](https://github.com/gooygeek/terraform-aws-securityhub-summary-email)
 
 Generates and sends a periodic email summarising of Security Hub. Based on https://github.com/aws-samples/aws-security-hub-summary-email
 
@@ -43,7 +45,7 @@ Here's how to invoke this module in your projects:
 
 ```hcl
 module "securityhub-email" {
-  source  = "gooygeek/security-hub-summary-email/aws"
+  source  = "app.terraform.io/aesop/security-hub-summary-email/aws"
   version = "x.x.x"
 }
 ```
@@ -88,17 +90,41 @@ Here is an example of using this module: [`examples/managed_sns`](https://github
 
 ## Inputs
 
-| Name                                                                                                                  | Description                                                                                                                                                                                                                                                                                                                                        | Type          | Default             | Required |
-| --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ------------------- | :------: |
-| <a name="input_additional_email_header_text"></a> [additional_email_header_text](#input_additional_email_header_text) | Additional text to append at the start of email message.                                                                                                                                                                                                                                                                                           | `string`      | `""`                |    no    |
-| <a name="input_additional_email_footer_text"></a> [additional_email_footer_text](#input_additional_email_footer_text) | Additional text to append at the end of email message.                                                                                                                                                                                                                                                                                             | `string`      | `""`                |    no    |
-| <a name="input_email"></a> [email](#input_email)                                                                      | Email Address for Subscriber to Security Hub summary. Only used if SNS arn is not specified.                                                                                                                                                                                                                                                       | `string`      | `null`              |    no    |
-| <a name="input_insights"></a> [insights](#input_insights)                                                             | list of insights and in what order to include in the summary. Possible values are: `aws_best_practices_by_status`, `aws_best_practices_by_severity`, `cis_by_status`, `cis_by_severity`, `guardduty_findings_by_severity`, `iam_access_keys_by_severity`, `all_findings_by_severity`, `new_findings`, `top_resource_types_with_findings_by_count`. | `list`        | `[]`                |    no    |
-| <a name="input_name"></a> [name](#input_name)                                                                         | ID element. Usually the component or solution name, e.g. 'app' or 'jenkins'.                                                                                                                                                                                                                                                                       | `string`      | `sechub-aummariser` |    no    |
-| <a name="input_schedule"></a> [schedule](#input_schedule)                                                             | Expression for scheduling the Security Hub summary email. Default: Every Monday 8:00 AM UTC. Example: Every Friday 9:00 AM UTC: cron(0 9 ? _ 6 _).                                                                                                                                                                                                 | `string`      | `cron(0 8 ? * 2 *)` |    no    |
-| <a name="input_sns_topic_arn"></a> [sns_topic_arn](#input_sns_topic_arn)                                              | ARN of the SNS Topic to send summaries to. If empty, a topic is created for you.                                                                                                                                                                                                                                                                   | `string`      | `null`              |    no    |
-| <a name="input_kms_key_id"></a> [kms_key_id](#input_kms_key_id)                                                       | KMS Key ID to use for encrypting the topic.                                                                                                                                                                                                                                                                                                        | `string`      | `alias/aws/sns`     |    no    |
-| <a name="input_tags"></a> [tags](#input_tags)                                                                         | Additional tags (e.g. `{'BusinessUnit': 'XYZ'}`).                                                                                                                                                                                                                                                                                                  | `map(string)` | `{}`                |    no    |
+| Name                                                                                                                  | Description                                                                                                                                        | Type          | Default             | Required |
+| --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ------------------- | :------: |
+| <a name="input_additional_email_header_text"></a> [additional_email_header_text](#input_additional_email_header_text) | Additional text to append at the start of email message.                                                                                           | `string`      | `""`                |    no    |
+| <a name="input_additional_email_footer_text"></a> [additional_email_footer_text](#input_additional_email_footer_text) | Additional text to append at the end of email message.                                                                                             | `string`      | `""`                |    no    |
+| <a name="input_email"></a> [email](#input_email)                                                                      | Email Address for Subscriber to Security Hub summary. Only used if SNS arn is not specified.                                                       | `string`      | `null`              |    no    |
+| <a name="input_insights"></a> [insights](#input_insights)                                                             | list of insights and in what order to include in the summary. See Below for possible values.                                                       | `list`        | `[]`                |    no    |
+| <a name="input_name"></a> [name](#input_name)                                                                         | ID element. Usually the component or solution name, e.g. 'app' or 'jenkins'.                                                                       | `string`      | `sechub-aummariser` |    no    |
+| <a name="input_schedule"></a> [schedule](#input_schedule)                                                             | Expression for scheduling the Security Hub summary email. Default: Every Monday 8:00 AM UTC. Example: Every Friday 9:00 AM UTC: cron(0 9 ? _ 6 _). | `string`      | `cron(0 8 ? * 2 *)` |    no    |
+| <a name="input_sns_topic_arn"></a> [sns_topic_arn](#input_sns_topic_arn)                                              | ARN of the SNS Topic to send summaries to. If empty, a topic is created for you.                                                                   | `string`      | `null`              |    no    |
+| <a name="input_kms_key_id"></a> [kms_key_id](#input_kms_key_id)                                                       | KMS Key ID to use for encrypting the topic.                                                                                                        | `string`      | `alias/aws/sns`     |    no    |
+| <a name="input_tags"></a> [tags](#input_tags)                                                                         | Additional tags (e.g. `{'BusinessUnit': 'XYZ'}`).                                                                                                  | `map(string)` | `{}`                |    no    |
+
+### Possible insight values
+
+- `aws_best_practices_by_status`
+- `aws_best_practices_by_severity`
+- `cis_by_status`
+- `cis_by_severity`
+- `health_by_severity` (AWS Health events)
+- `guardduty_by_severity` (GuardDuty)
+- `macie_by_severity` (Macie)
+- `iam_by_severity` (IAM Access Analyzer)
+- `ta_by_severity` (Trusted Advisor)
+- `inspector_by_severity` (Inspector)
+- `ssmpm_by_severity` (Systems Manager Patch Manager)
+- `ssmops_by_severity` (Systems Manager OpsCenter and Explorer)
+- `fwman_by_severity` (Firewall Manager)
+- `auditman_by_severity` (Audit Manager)
+- `detective_by_severity` (Detective)
+- `chatbot_by_severity` (Chatbot)
+- `all_findings_by_severity`
+- `new_findings`
+- `top_resource_types_with_findings_by_count`
+
+See [documentation](https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-internal-providers.html) for a list of Security Hub integrations
 
 ## Outputs
 

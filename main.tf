@@ -128,6 +128,27 @@ resource "aws_securityhub_insight" "cis_by_severity" {
   }
 }
 
+resource "aws_securityhub_insight" "health_by_severity" {
+  name = "Summary Email - Count of Health findings by severity"
+
+  group_by_attribute = "SeverityLabel"
+
+  filters {
+    product_name {
+      comparison = "EQUALS"
+      value      = "Health"
+    }
+    workflow_status {
+      comparison = "NOT_EQUALS"
+      value      = "SUPPRESSED"
+    }
+    record_state {
+      comparison = "EQUALS"
+      value      = "ACTIVE"
+    }
+  }
+}
+
 resource "aws_securityhub_insight" "guardduty_by_severity" {
   name = "Summary Email - Count of Amazon GuardDuty findings by severity"
 
@@ -153,6 +174,26 @@ resource "aws_securityhub_insight" "guardduty_by_severity" {
   }
 }
 
+resource "aws_securityhub_insight" "macie_by_severity" {
+  name = "Summary Email - Count of Macie findings by severity"
+
+  group_by_attribute = "SeverityLabel"
+
+  filters {
+    product_name {
+      comparison = "EQUALS"
+      value      = "Macie"
+    }
+    workflow_status {
+      comparison = "NOT_EQUALS"
+      value      = "SUPPRESSED"
+    }
+    record_state {
+      comparison = "EQUALS"
+      value      = "ACTIVE"
+    }
+  }
+}
 resource "aws_securityhub_insight" "iam_by_severity" {
   name = "Summary Email - Count of IAM Access Analyzer findings by severity"
 
@@ -162,6 +203,174 @@ resource "aws_securityhub_insight" "iam_by_severity" {
     product_name {
       comparison = "EQUALS"
       value      = "IAM Access Analyzer"
+    }
+    workflow_status {
+      comparison = "NOT_EQUALS"
+      value      = "SUPPRESSED"
+    }
+    record_state {
+      comparison = "EQUALS"
+      value      = "ACTIVE"
+    }
+  }
+}
+
+resource "aws_securityhub_insight" "ta_by_severity" {
+  name = "Summary Email - Count of Trusted Advisor findings by severity"
+
+  group_by_attribute = "SeverityLabel"
+
+  filters {
+    product_name {
+      comparison = "EQUALS"
+      value      = "Trusted Advisor"
+    }
+    workflow_status {
+      comparison = "NOT_EQUALS"
+      value      = "SUPPRESSED"
+    }
+    record_state {
+      comparison = "EQUALS"
+      value      = "ACTIVE"
+    }
+  }
+}
+
+resource "aws_securityhub_insight" "inspector_by_severity" {
+  name = "Summary Email - Count of Inspector findings by severity"
+
+  group_by_attribute = "SeverityLabel"
+
+  filters {
+    product_name {
+      comparison = "EQUALS"
+      value      = "Inspector"
+    }
+    workflow_status {
+      comparison = "NOT_EQUALS"
+      value      = "SUPPRESSED"
+    }
+    record_state {
+      comparison = "EQUALS"
+      value      = "ACTIVE"
+    }
+  }
+}
+
+resource "aws_securityhub_insight" "ssmpm_by_severity" {
+  name = "Summary Email - Count of Systems Manager Patch Manager findings by severity"
+
+  group_by_attribute = "SeverityLabel"
+
+  filters {
+    product_name {
+      comparison = "EQUALS"
+      value      = "Systems Manager Patch Manager"
+    }
+    workflow_status {
+      comparison = "NOT_EQUALS"
+      value      = "SUPPRESSED"
+    }
+    record_state {
+      comparison = "EQUALS"
+      value      = "ACTIVE"
+    }
+  }
+}
+
+resource "aws_securityhub_insight" "ssmops_by_severity" {
+  name = "Summary Email - Count of Systems Manager OpsCenter and Explorer findings by severity"
+
+  group_by_attribute = "SeverityLabel"
+
+  filters {
+    product_name {
+      comparison = "EQUALS"
+      value      = "Systems Manager OpsCenter and Explorer"
+    }
+    workflow_status {
+      comparison = "NOT_EQUALS"
+      value      = "SUPPRESSED"
+    }
+    record_state {
+      comparison = "EQUALS"
+      value      = "ACTIVE"
+    }
+  }
+}
+
+resource "aws_securityhub_insight" "fwman_by_severity" {
+  name = "Summary Email - Count of Firewall Manager findings by severity"
+
+  group_by_attribute = "SeverityLabel"
+
+  filters {
+    product_name {
+      comparison = "EQUALS"
+      value      = "Firewall Manager"
+    }
+    workflow_status {
+      comparison = "NOT_EQUALS"
+      value      = "SUPPRESSED"
+    }
+    record_state {
+      comparison = "EQUALS"
+      value      = "ACTIVE"
+    }
+  }
+}
+
+resource "aws_securityhub_insight" "auditman_by_severity" {
+  name = "Summary Email - Count of Audit Manager findings by severity"
+
+  group_by_attribute = "SeverityLabel"
+
+  filters {
+    product_name {
+      comparison = "EQUALS"
+      value      = "Audit Manager"
+    }
+    workflow_status {
+      comparison = "NOT_EQUALS"
+      value      = "SUPPRESSED"
+    }
+    record_state {
+      comparison = "EQUALS"
+      value      = "ACTIVE"
+    }
+  }
+}
+
+resource "aws_securityhub_insight" "detective_by_severity" {
+  name = "Summary Email - Count of Detective findings by severity"
+
+  group_by_attribute = "SeverityLabel"
+
+  filters {
+    product_name {
+      comparison = "EQUALS"
+      value      = "Detective"
+    }
+    workflow_status {
+      comparison = "NOT_EQUALS"
+      value      = "SUPPRESSED"
+    }
+    record_state {
+      comparison = "EQUALS"
+      value      = "ACTIVE"
+    }
+  }
+}
+
+resource "aws_securityhub_insight" "chatbot_by_severity" {
+  name = "Summary Email - Count of Chatbot findings by severity"
+
+  group_by_attribute = "SeverityLabel"
+
+  filters {
+    product_name {
+      comparison = "EQUALS"
+      value      = "Chatbot"
     }
     workflow_status {
       comparison = "NOT_EQUALS"
@@ -245,8 +454,18 @@ locals {
     "aws_best_practices_by_severity"            = aws_securityhub_insight.aws_best_prac_by_severity.arn
     "cis_by_status"                             = aws_securityhub_insight.cis_by_status.arn
     "cis_by_severity"                           = aws_securityhub_insight.cis_by_severity.arn
-    "guardduty_findings_by_severity"            = aws_securityhub_insight.guardduty_by_severity.arn
-    "iam_access_keys_by_severity"               = aws_securityhub_insight.iam_by_severity.arn
+    "health_by_severity"                        = aws_securityhub_insight.health_by_severity.arn
+    "guardduty_by_severity"                     = aws_securityhub_insight.guardduty_by_severity.arn
+    "macie_by_severity"                         = aws_securityhub_insight.macie_by_severity.arn
+    "iam_by_severity"                           = aws_securityhub_insight.iam_by_severity.arn
+    "ta_by_severity"                            = aws_securityhub_insight.ta_by_severity.arn
+    "inspector_by_severity"                     = aws_securityhub_insight.inspector_by_severity.arn
+    "ssmpm_by_severity"                         = aws_securityhub_insight.ssmpm_by_severity.arn
+    "ssmops_by_severity"                        = aws_securityhub_insight.ssmops_by_severity.arn
+    "fwman_by_severity"                         = aws_securityhub_insight.fwman_by_severity.arn
+    "auditman_by_severity"                      = aws_securityhub_insight.auditman_by_severity.arn
+    "detective_by_severity"                     = aws_securityhub_insight.detective_by_severity.arn
+    "chatbot_by_severity"                       = aws_securityhub_insight.chatbot_by_severity.arn
     "all_findings_by_severity"                  = aws_securityhub_insight.all_by_severity.arn
     "new_findings"                              = aws_securityhub_insight.new_findings.arn
     "top_resource_types_with_findings_by_count" = aws_securityhub_insight.top_resource_types.arn
