@@ -13,8 +13,20 @@ A recurring Security Hub Summary email will provide recipients with a proactive 
 
 - AWS Foundational Security Best Practices findings by status
 - AWS Foundational Security Best Practices findings by severity
+- CIS Benchmark findings by compliance status
+- Failed CIS Benchmark findings by severity
+- Health findings by severity
 - Amazon GuardDuty findings by severity
+- Macie findings by severity
 - AWS IAM Access Analyzer findings by severity
+- Trusted Advisor findings by severity
+- Inspector findings by severity
+- Systems Manager Patch Manager findings by severity
+- Systems Manager OpsCenter and Explorer findings by severity
+- Firewall Manager findings by severity
+- Audit Manager findings by severity
+- Detective findings by severity
+- Chatbot findings by severity
 - Unresolved findings by severity
 - New findings in the last 7 days by security product
 - Top 10 resource types with the most findings
