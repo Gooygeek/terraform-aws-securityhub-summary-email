@@ -1,7 +1,7 @@
 # terraform-aws-securityhub-summary-email
 
-[![Build Status](https://github.com/aesop/terraform-aws-securityhub-summary-email/actions/workflows/terraform.yml/badge.svg)](https://github.com/aesop/terraform-aws-securityhub-summary-email/actions/workflows/terraform.yml)
-[![Release](https://github.com/aesop/terraform-aws-securityhub-summary-email/actions/workflows/release.yml/badge.svg)](https://github.com/aesop/terraform-aws-securityhub-summary-email/actions/workflows/release.yml)
+[![Build Status](https://github.com/gooygeek/terraform-aws-securityhub-summary-email/actions/workflows/terraform.yml/badge.svg)](https://github.com/gooygeek/terraform-aws-securityhub-summary-email/actions/workflows/terraform.yml)
+[![Release](https://github.com/gooygeek/terraform-aws-securityhub-summary-email/actions/workflows/release.yml/badge.svg)](https://github.com/gooygeek/terraform-aws-securityhub-summary-email/actions/workflows/release.yml)
 
 Generates and sends a periodic email summarising of Security Hub. Based on <https://github.com/aws-samples/aws-security-hub-summary-email>
 
