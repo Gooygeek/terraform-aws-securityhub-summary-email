@@ -1,0 +1,22 @@
+version: '3.6'
+
+services:
+  terraform:
+    image: hashicorp/terraform:1.1.7
+    env_file: .env
+    entrypoint: []
+    working_dir: /opt/app
+    volumes:
+      - .:/opt/app:rw
+  terraform-lint:
+    image: ghcr.io/terraform-linters/tflint
+    env_file: .env
+    working_dir: /opt/app
+    volumes:
+      - .:/opt/app:rw
+  terraform-docs:
+    image: quay.io/terraform-docs/terraform-docs:0.16.0
+    env_file: .env
+    working_dir: /opt/app
+    volumes:
+      - .:/opt/app:rw
