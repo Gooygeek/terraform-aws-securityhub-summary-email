@@ -1,63 +1,137 @@
-name: Terraform
-on: [push]
+name: 'Terraform'
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 env:
-  TERRAFORM_VERSION: 1.0.9
+  TERRAFORM_VERSION: 1.1.7
+  TFLINT_VERSION: 0.34.1
   AWS_DEFAULT_REGION: ap-southeast-2
 
 jobs:
-  format:
-    name: Format
+  terraform:
+    name: 'Terraform'
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.1.0
-      - name: Format all
-        uses: hashicorp/terraform-github-actions@v0.8.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tf_actions_version: ${{ env.TERRAFORM_VERSION }}
-          tf_actions_comment: true
-          tf_actions_subcommand: fmt
+        uses: actions/checkout@v2
 
-  validate:
-    name: Validate
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    strategy:
-      matrix:
-        dir:
-          - '.'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2.1.0
-      - name: Init
-        uses: hashicorp/terraform-github-actions@v0.8.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tf_actions_version: ${{ env.TERRAFORM_VERSION }}
-          tf_actions_working_dir: ${{ matrix.dir }}
-          tf_actions_comment: true
-          tf_actions_subcommand: init
-      - name: Validate
-        uses: hashicorp/terraform-github-actions@v0.8.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tf_actions_version: ${{ env.TERRAFORM_VERSION }}
-          tf_actions_working_dir: ${{ matrix.dir }}
-          tf_actions_comment: true
-          tf_actions_subcommand: validate
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        # with:
+          # terraform_version: ${{ env.TERRAFORM_VERSION }} ## Use the latest version
+          # cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-  lint:
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check -diff
+        continue-on-error: true
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+
+      # - name: Terraform Plan
+      #   id: plan
+      #   if: github.event_name == 'pull_request'
+      #   run: terraform plan -no-color
+      #   continue-on-error: true
+
+      - name: Update Pull Request
+        uses: actions/github-script@0.9.0
+        if: github.event_name == 'pull_request'
+        env:
+          FMT: "\n${{ steps.fmt.outputs.stdout }}"
+        #   PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+            <details>
+            <summary>Show Format</summary>
+
+            \`\`\`diff
+            ${process.env.FMT}
+            \`\`\`
+
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+
+### Add to the above  details section if running a plan
+# <summary>Show Plan</summary>
+
+# \`\`\`\n
+# ${process.env.PLAN}
+# \`\`\`
+
+# - name: Terraform Plan Status
+#   if: steps.plan.outcome == 'failure'
+#   run: exit 1
+
+# - name: Terraform Apply
+#   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+#   run: terraform apply -auto-approve
+
+  tflint:
     name: Lint
+    needs: terraform
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2.1.0
-      - name: TFLint
-        run: docker run --rm -v ${PWD}:/data ghcr.io/terraform-linters/tflint
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Cache plugin dir
+      uses: actions/cache@v2
+      with:
+        path: ~/.tflint.d/plugins
+        key: ubuntu-latest-tflint-${{ hashFiles('.tflint.hcl') }}
+
+    - name: Setup TFLint
+      uses: terraform-linters/setup-tflint@v1
+      with:
+        tflint_version: "v${{ env.TFLINT_VERSION }}"
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Show version
+      run: tflint --version
+
+    - name: Init TFLint
+      run: tflint --init
+
+    - name: Run TFLint
+      run: tflint -f compact
+
+  tfdocs:
+    needs: tflint
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+
+    - name: Render terraform docs and push changes back to PR
+      uses: terraform-docs/gh-actions@main
+      with:
+        working-dir: .
+        output-file: README.md
+        output-method: inject
+        git-push: "true"
