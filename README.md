@@ -1,15 +1,9 @@
 # terraform-aws-securityhub-summary-email
 
-<!-- markdownlint-disable -->
-
 [![Build Status](https://github.com/aesop/terraform-aws-securityhub-summary-email/actions/workflows/terraform.yml/badge.svg)](https://github.com/aesop/terraform-aws-securityhub-summary-email/actions/workflows/terraform.yml)
 [![Release](https://github.com/aesop/terraform-aws-securityhub-summary-email/actions/workflows/release.yml/badge.svg)](https://github.com/aesop/terraform-aws-securityhub-summary-email/actions/workflows/release.yml)
 
-<!-- markdownlint-restore -->
-
-Cloned from [gooygeek/terraform-aws-securityhub-summary-email](https://github.com/gooygeek/terraform-aws-securityhub-summary-email)
-
-Generates and sends a periodic email summarising of Security Hub. Based on https://github.com/aws-samples/aws-security-hub-summary-email
+Generates and sends a periodic email summarising of Security Hub. Based on <https://github.com/aws-samples/aws-security-hub-summary-email>
 
 This solution uses Security Hub custom insights, AWS Lambda, and the Security Hub API. A custom insight is a collection of findings that are aggregated by a grouping attribute, such as severity or status. Insights help you identify common security issues that may require remediation action. Security Hub includes several managed insights, or you can create your own custom insights.
 
@@ -52,7 +46,9 @@ module "securityhub-email" {
 
 ## Examples
 
-Here is an example of using this module: [`examples/managed_sns`](https://github.com/gooygeek/terraform-aws-securityhub-summary-email/tree/master/examples/managed_sns/)
+Here is an example of using this module:
+
+- [`examples/managed_sns`](https://github.com/gooygeek/terraform-aws-securityhub-summary-email/tree/master/examples/managed_sns/)
 
 ## Requirements
 
