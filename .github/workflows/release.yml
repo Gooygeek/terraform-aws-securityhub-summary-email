@@ -23,5 +23,5 @@ jobs:
           npm install @semantic-release/exec
       - name: "release :: tag repo"
         env:
-          GITHUB_TOKEN: ${{ secrets.X_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release
