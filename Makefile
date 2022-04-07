@@ -1,7 +1,6 @@
-
-COMPOSE_RUN_TF = docker-compose run terraform
-COMPOSE_TF_LINT = docker-compose run terraform-lint
-COMPOSE_TF_DOCS = docker-compose run terraform-docs
+COMPOSE_RUN_TF = docker-compose run --rm terraform
+COMPOSE_TF_LINT = docker-compose run --rm terraform-lint
+COMPOSE_TF_DOCS = docker-compose run --rm terraform-docs
 
 .env: ## Create .env file
 	@echo "No .env file found. Create new .env using .env.template"
