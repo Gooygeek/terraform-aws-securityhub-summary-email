@@ -16,10 +16,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
+        uses: hashicorp/setup-terraform@v2
         # with:
           # terraform_version: ${{ env.TERRAFORM_VERSION }} ## Use the latest version
           # cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
@@ -96,16 +96,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Cache plugin dir
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ~/.tflint.d/plugins
         key: ubuntu-latest-tflint-${{ hashFiles('.tflint.hcl') }}
 
     - name: Setup TFLint
-      uses: terraform-linters/setup-tflint@v1
+      uses: terraform-linters/setup-tflint@v3
       with:
         tflint_version: "v${{ env.TFLINT_VERSION }}"
         github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -124,7 +124,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: ${{ github.event.pull_request.head.ref }}
 
